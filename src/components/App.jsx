@@ -1,36 +1,67 @@
-import React  from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 function App() {
-    
-    const [headingText, setHeadingText] = useState("Hello");
-    const [isMouseOver, setMouseOver] = useState(false)
+  const [contact, setContact] = useState({
+    fName: "",
+    lName: "",
+    email: ""
+  });
 
-    function handleClick() {
-        console.log("Hello");
-        setHeadingText("Submited");
-    }
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-    function mouseOver() {
-        setMouseOver(true);
-    }
+    setContact(prevValue => {
+      if (name === "fName") {
+        return {
+          fName: value,
+          lName: prevValue.lName,
+          email: prevValue.email
+        };
+      } else if (name === "lName") {
+        return {
+          fName: prevValue.fName,
+          lName: value,
+          email: prevValue.email
+        };
+      } else if (name === "email") {
+        return {
+          fName: prevValue.fName,
+          lName: prevValue.lName,
+          email: value
+        };
+      }
+    });
+  }
 
-    function mouseOut() {
-        setMouseOver(false);
-    }
-    return (
-        <div className="container">
-        <h1> {headingText} </h1>
-        <input type="text" placeholder="What's your name?" />
-        <button 
-        style={{backgroundColor : isMouseOver ? "teal" : "white"}}
-        onClick={handleClick}
-        onMouseOver={mouseOver}
-        onMouseOut={mouseOut}>Submit</button>
-        
-      </div>
-    
-    );
+  return (
+    <div className="container">
+      <h1>
+        Hello {contact.fName} {contact.lName}
+      </h1>
+      <p>{contact.email}</p>
+      <form>
+        <input
+          onChange={handleChange}
+          value={contact.fName}
+          name="fName"
+          placeholder="First Name"
+        />
+        <input
+          onChange={handleChange}
+          value={contact.lName}
+          name="lName"
+          placeholder="Last Name"
+        />
+        <input
+          onChange={handleChange}
+          value={contact.email}
+          name="email"
+          placeholder="Email"
+        />
+        <button>Submit</button>
+      </form>
+    </div>
+  );
 }
 
 export default App;
